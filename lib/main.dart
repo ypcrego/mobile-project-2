@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_project_2/features/auth/login_page.dart';
+import 'package:mobile_project_2/features/shop/home_page.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final isLogged = prefs.getBool('isLogged') ?? false;
+
+  runApp(MainApp(isLogged: isLogged));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final bool isLogged;
+  const MainApp({super.key, required this.isLogged});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Minha aplicação',
-      home: LoginPage(),
+      home: isLogged ? const HomePage() : const LoginPage(),
     );
   }
 }

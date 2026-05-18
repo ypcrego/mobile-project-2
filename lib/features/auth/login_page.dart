@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../shop/home_page.dart';
+
+const _mockUser = 'adm';
+const _mockPass = 'adm';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,13 +25,17 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _onLoginPressed() {
+  void _onLoginPressed() async {
     setState(() {
       _errorMessage = null;
     });
 
     if (_formKey.currentState?.validate() ?? false) {
-      if (_usernameController.text == 'admin' && _passwordController.text == '12345678') {
+      if (_usernameController.text == _mockUser && _passwordController.text == _mockPass) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLogged', true);
+
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
