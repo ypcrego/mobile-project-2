@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shop/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +12,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -20,7 +22,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginPressed() {
-    // Phase 2 will implement validation here.
+    setState(() {
+      _errorMessage = null;
+    });
+
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_usernameController.text == 'admin' && _passwordController.text == '12345678') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      } else {
+        setState(() {
+          _errorMessage = 'Credenciais inválidas';
+        });
+      }
+    }
   }
 
   @override
@@ -40,6 +57,14 @@ class _LoginPageState extends State<LoginPage> {
                 _UsernameInput(controller: _usernameController),
                 const SizedBox(height: 16),
                 _PasswordInput(controller: _passwordController),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 16),
+                  Text(
+                    _errorMessage!,
+                    style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
                 const SizedBox(height: 32),
                 _LoginButton(onPressed: _onLoginPressed),
                 const SizedBox(height: 16),
@@ -83,6 +108,12 @@ class _UsernameInput extends StatelessWidget {
         hintText: 'Digite seu usuário',
         border: OutlineInputBorder(),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Campo obrigatório';
+        }
+        return null;
+      },
     );
   }
 }
@@ -102,6 +133,12 @@ class _PasswordInput extends StatelessWidget {
         hintText: 'Digite sua senha',
         border: OutlineInputBorder(),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Campo obrigatório';
+        }
+        return null;
+      },
     );
   }
 }
