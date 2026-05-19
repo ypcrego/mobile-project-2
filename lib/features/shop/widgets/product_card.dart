@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/product.dart';
+import '../providers/cart_provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -52,7 +54,14 @@ class ProductCard extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Phase 4 will trigger CartProvider here.
+                      context.read<CartProvider>().addItem(product);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${product.title} adicionado ao carrinho!'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
                     },
                     child: const Text('Comprar'),
                   ),

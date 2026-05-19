@@ -4,6 +4,7 @@ import '../auth/login_page.dart';
 import 'models/product.dart';
 import 'widgets/product_card.dart';
 import 'product_repository.dart';
+import 'cart_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,7 +43,10 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-               // Phase 4 will navigate to CartPage
+               Navigator.push(
+                 context,
+                 MaterialPageRoute(builder: (context) => const CartPage()),
+               );
             },
           ),
           IconButton(
